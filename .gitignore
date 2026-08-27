@@ -10,5 +10,5 @@ wheels/
 .venv
 
 # game states
-game_state.json1
+game_state.jsonl
 __pycache__/
