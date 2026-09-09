@@ -1,7 +1,10 @@
-import pygame
+#Update the game loop to use the new groups instead of the Player object directly.
+#Call the .update() method on the "updatable" group.
+#Loop over all "drawables" and .draw() them individually.import pygame
 from logger import log_state
 from constants import SCREEN_WIDTH, SCREEN_HEIGHT
 from player import Player
+import pygame
 def main():
 	pygame.init()
 	print(f"Starting Asteroids with pygame version: {pygame.version.ver}")
@@ -9,6 +12,9 @@ def main():
 	screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 	clock = pygame.time.Clock()
 	dt : int = 0.0
+	updatable = pygame.sprite.Group()
+	drawable = pygame.sprite.Group()
+	Player.containers = (updatable, drawable)
 	player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT /2)
 	while True:
 		log_state()
@@ -17,11 +23,11 @@ def main():
 			if event.type == pygame.QUIT:
 				return
 
+		dt = clock.tick(60) / 1000
+		updatable.update(dt)
 		screen.fill("black")
-		player.draw(screen)
+		for i in drawable:
+			i.draw(screen)
 		pygame.display.flip()
-
-		dt = clock.tick(60) / 1000 # This is incomplete
-		player.update(dt)
 if __name__ == "__main__":
 	main()
